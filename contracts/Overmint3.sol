@@ -17,4 +17,6 @@ contract Overmint3 is ERC721 {
         _safeMint(msg.sender, totalSupply);
         amountMinted[msg.sender]++;
     }
+
+  
 }

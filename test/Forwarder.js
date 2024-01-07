@@ -6,7 +6,7 @@ const WALLET_NAME = "Wallet";
 const FORWARDER_NAME = "Forwarder";
 const NAME = "Forwarder tests";
 
-describe.only(NAME, function () {
+describe(NAME, function () {
   async function setup() {
     const [, attackerWallet] = await ethers.getSigners();
     const value = ethers.utils.parseEther("1");
