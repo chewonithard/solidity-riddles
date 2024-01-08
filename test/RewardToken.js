@@ -5,7 +5,7 @@ const { ethers } = require('hardhat');
 
 const NAME = 'RewardToken';
 
-describe.only(NAME, function () {
+describe(NAME, function () {
 	async function setup() {
 		const [, attackerWallet] = await ethers.getSigners();
 

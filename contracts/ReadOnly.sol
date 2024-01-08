@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC777/ERC777.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "hardhat/console.sol";
 
 // Users can stake ether in ReadOnlyPool
 // For each ether they contribute to the pool, they are minted an equal amount of
@@ -80,6 +81,8 @@ contract ReadOnlyPool is ReentrancyGuard, ERC20("LPToken", "LPT") {
      */
 
     function getVirtualPrice() external view returns (uint256 virtualPrice) {
+        console.log("balance", address(this).balance);
+        console.log("totalSupply", totalSupply());
         virtualPrice = address(this).balance / totalSupply();
     }
 
