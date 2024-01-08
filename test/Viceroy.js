@@ -40,7 +40,8 @@ describe("Viceroy", async function () {
 
   // prettier-ignore;
   it("conduct your attack here", async function () {
-    await attacker.attack(governance);
+    // Appoint a viceroy
+    await attacker.connect(attackerWallet).attack(governance.address)
   });
 
   after(async function () {
