@@ -8,7 +8,7 @@ const { ethers } = require("hardhat");
 
 const NAME = "DeleteUser";
 
-describe(NAME, function () {
+describe.only(NAME, function () {
   async function setup() {
     const [owner, attackerWallet] = await ethers.getSigners();
 
@@ -25,7 +25,13 @@ describe(NAME, function () {
       ({ victimContract, attackerWallet } = await loadFixture(setup));
     });
 
-    it("conduct your attack here", async function () {});
+    it("conduct your attack here", async function () {
+      const AttackFactory = await ethers.getContractFactory("DeleteUserAttacker");
+      const attackContract = await AttackFactory.connect(attackerWallet).deploy(
+        victimContract.address, { value: ethers.utils.parseEther("1") }
+      );
+
+    });
 
     after(async function () {
       expect(

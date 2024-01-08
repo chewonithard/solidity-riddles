@@ -5,14 +5,16 @@ pragma solidity 0.8.15;
  * Your goal is to steal all the ether in the contract.
  *
  */
- 
+
+ import "hardhat/console.sol";
+
 contract DeleteUser {
     struct User {
         address addr;
         uint256 amount;
     }
 
-    User[] private users;
+    User[] public users;
 
     function deposit() external payable {
         users.push(User({addr: msg.sender, amount: msg.value}));
@@ -23,6 +25,8 @@ contract DeleteUser {
         require(user.addr == msg.sender);
         uint256 amount = user.amount;
 
+        // @solution: should have done this instead:
+        // users[index] = users[users.length - 1];
         user = users[users.length - 1];
         users.pop();
 
