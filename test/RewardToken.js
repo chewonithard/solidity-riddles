@@ -5,7 +5,7 @@ const { ethers } = require('hardhat');
 
 const NAME = 'RewardToken';
 
-describe(NAME, function () {
+describe.only(NAME, function () {
 	async function setup() {
 		const [, attackerWallet] = await ethers.getSigners();
 
@@ -50,7 +50,12 @@ describe(NAME, function () {
 
 		// prettier-ignore
 		it("conduct your attack here", async function () {
-  
+          await attackerContract.connect(attackerWallet).stake(depositoorContract.address, NFTToStakeContract.address);
+
+          // Time passes
+          await time.increase(1000000);
+
+          await attackerContract.connect(attackerWallet).attack();
       });
 
 		after(async function () {
